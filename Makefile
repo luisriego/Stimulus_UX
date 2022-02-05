@@ -2,7 +2,7 @@
 
 OS = $(shell uname)
 UID = $(shell id -u)
-DOCKER_BE = docker-dev-env-for-symfony-be
+DOCKER_BE = stimulus-be
 
 help: ## Show this help message
 	@echo 'usage: make [target]'
@@ -11,7 +11,7 @@ help: ## Show this help message
 	@egrep '^(.+)\:\ ##\ (.+)' ${MAKEFILE_LIST} | column -t -c 2 -s ':#'
 
 start: ## Start the containers
-	docker network create docker-dev-env-for-symfony-network || true
+	docker network create stimulus-network || true
 	cp -n docker-compose.yml.dist docker-compose.yml || true
 	cp -n .env.dist .env || true
 	U_ID=${UID} docker-compose up -d
@@ -23,14 +23,17 @@ restart: ## Restart the containers
 	$(MAKE) stop && $(MAKE) start
 
 build: ## Rebuilds all the containers
-	docker network create docker-dev-env-for-symfony-network || true
+	docker network create stimulus-network || true
 	cp -n docker-compose.yml.dist docker-compose.yml || true
 	cp -n .env.dist .env || true
 	U_ID=${UID} docker-compose build
 
 prepare: ## Runs backend commands
 	$(MAKE) composer-install
-	$(MAKE) migrations
+# 	$(MAKE) migrations
+
+run: ## starts the Symfony development server in detached mode
+	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} symfony serve -d
 
 # Backend commands
 composer-install: ## Installs composer dependencies

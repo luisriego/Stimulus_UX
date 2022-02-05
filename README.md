@@ -1,11 +1,11 @@
-# docker-dev-env-for-symfony
-(Cloned from @juanwilde github)
+# Stimulus UX
+
 
 This repository contains the basic configuration for a complete local environment for Symfony projects
 
 ### Content:
 - NGINX 1.19 container to handle HTTP requests
-- PHP 8.0.1 container to host your Symfony application
+- PHP 7.4 container to host your Symfony application
 - MySQL 8.0 container to store databases
 
 (feel free to update any version in `Dockerfiles` and ports in `docker-compose.yml`)
@@ -25,3 +25,5 @@ Happy coding!
 - Insert phpunit testing with composer 'composer require --dev phpunit/phpunit symfony/test-pack'
 - Run `sf d:m:m -n --env=test` to apply migrations on test enviroment
 
+
+(Cloned from @juanwilde github)

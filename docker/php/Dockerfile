@@ -1,4 +1,4 @@
-FROM php:8.0.1-fpm
+FROM php:7.4.13-fpm
 
 ARG UID
 
@@ -26,6 +26,19 @@ RUN composer self-update
 RUN wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
 RUN chmod a+x php-cs-fixer
 RUN mv php-cs-fixer /usr/local/bin/php-cs-fixer
+
+## Install Symfony binary
+USER appuser
+RUN wget https://get.symfony.com/cli/installer -O - | bash
+USER root
+RUN mv /home/appuser/.symfony/bin/symfony /usr/local/bin/symfony
+
+## Install Yarn
+RUN curl https://deb.nodesource.com/setup_12.x | bash
+RUN curl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update && apt-get install -y nodejs yarn postgresql-client
 
 RUN mkdir -p /appdata/www
 
